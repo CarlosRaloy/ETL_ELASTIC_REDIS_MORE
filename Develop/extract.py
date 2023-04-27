@@ -35,18 +35,18 @@ def cache_function_results(function):
 def query_products():
     # Connection postgres
     parameters = {
-        "host": "10.150.4.172",
-        "port": "5433",
-        "user": "lookerstudio",
-        "password": "R3porte4d0r.",
-        "database": "raloy_productivo"
+        "host": "127.0.0.1",
+        "port": "5432",
+        "user": "etl",
+        "password": "123",
+        "database": "customer"
     }
 
     conn = psycopg2.connect(**parameters)
     cur = conn.cursor()
 
     # Start the query
-    cur.execute("""Select rp.id,rp.name from res_partner rp""")
+    cur.execute("""Select rp.id,rp.name,rp.code from res_partner rp""")
 
     # Get column names from cursor description
     column_names = [desc[0] for desc in cur.description]
@@ -92,3 +92,4 @@ if __name__ == "__main__":
 
     # Iniciar el hilo para actualizar el caché cada 10 minutos
     threading.Thread(target=update_cache).start()
+
