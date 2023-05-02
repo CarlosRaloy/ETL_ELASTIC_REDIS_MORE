@@ -5,11 +5,12 @@ import functools
 import redis
 import threading
 import time
+import json
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
 
-def etl_raloy(query, redis_name, elasticsearch_name, time_redis, time_elastic):
+def etl_raloy(query, redis_name, elasticsearch_name, time_redis, time_elastic, database, source):
     # Creamos un cliente de Redis
     redis_client = redis.Redis(host='localhost', port=6379)
 
@@ -36,13 +37,7 @@ def etl_raloy(query, redis_name, elasticsearch_name, time_redis, time_elastic):
 
     def query_dates():
         # Connection postgres
-        parameters = {
-            "host": "127.0.0.1",
-            "port": "5432",
-            "user": "etl",
-            "password": "123",
-            "database": "customer"
-        }
+        parameters = database
 
         conn = psycopg2.connect(**parameters)
         cur = conn.cursor()
@@ -90,10 +85,14 @@ def etl_raloy(query, redis_name, elasticsearch_name, time_redis, time_elastic):
         # obtener los valores de las claves
         cached_query_redis = redis_client.get(f"cached_query_dates{redis_name}:():dict_items([])")
 
-        # convertir los datos de bytes a una cadena de caracteres y luego a un diccionario
-        cached_query_redis = ast.literal_eval(cached_query_redis.decode())
+        try:
+            cached_query_odoo = ast.literal_eval(cached_query_redis.decode())
+            df = pd.DataFrame(cached_query_odoo)
 
-        df = pd.DataFrame(cached_query_redis)
+        except Exception:
+            data = json.loads(cached_query_redis)
+            df = pd.DataFrame.from_dict(data)
+
         return df
 
     def elastic_indexation():
@@ -104,17 +103,12 @@ def etl_raloy(query, redis_name, elasticsearch_name, time_redis, time_elastic):
             doc = {
                 '_index': elasticsearch_name,
                 '_id': i,
-                '_source': {
-                    'id': row['id'],
-                    'name': row['name'],
-                    'code': row['code']
-                }
+                '_source': {field: row[field] for field in source}
             }
             docs.append(doc)
 
         # Indexar documentos en Elasticsearch
         bulk(client, docs)
-
         client.close()
 
     # Actualizar el caché al iniciar el programa
@@ -133,4 +127,16 @@ def etl_raloy(query, redis_name, elasticsearch_name, time_redis, time_elastic):
         time.sleep(time_elastic)
 
 
-etl_raloy("""Select rp.id,rp.name,rp.code from res_partner rp""", "_patitos", "python", 10, 20)
+postgres = {
+    "host": "127.0.0.1",
+    "port": "5432",
+    "user": "etl",
+    "password": "123",
+    "database": "customer"
+}
+
+list_fields = ['id', 'name', 'code']
+
+query = """Select rp.id,rp.name,rp.code from res_partner rp"""
+
+etl_raloy(query, "_productos", "productos", 10, 20, postgres, list_fields)

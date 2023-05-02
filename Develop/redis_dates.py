@@ -1,4 +1,5 @@
 import redis
+import json
 import pandas as pd
 import ast
 
@@ -8,13 +9,17 @@ def redis_dates():
     r = redis.Redis(host='localhost', port=6379, db=0)
 
     # obtener los valores de las claves
-    cached_query_odoo = r.get("cached_query_products:():dict_items([])")
+    cached_query_odoo = r.get("cached_query_dates_cool:():dict_items([])").decode('utf8')
 
-    # convertir los datos de bytes a una cadena de caracteres y luego a un diccionario
-    cached_query_odoo = ast.literal_eval(cached_query_odoo.decode())
+    try:
+        cached_query_odoo = ast.literal_eval(cached_query_odoo.decode())
+        df = pd.DataFrame(cached_query_odoo)
 
-    df = pd.DataFrame(cached_query_odoo)
-    return df
+    except Exception:
+        data = json.loads(cached_query_odoo)
+        df = pd.DataFrame.from_dict(data)
+
+    print(df)
 
 
 if __name__ == "__main__":
