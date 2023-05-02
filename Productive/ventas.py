@@ -10,7 +10,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
 
-class Settings:
+class Settings_redis:
     def __init__(self, ip, port):
         self.ip = ip
         self.port = port
@@ -145,5 +145,5 @@ list_fields = ['id', 'name']
 
 query = """select rp.id, rp.name from res_partner rp"""
 
-clientes = Settings("localhost", "6379")
+clientes = Settings_redis("localhost", "6379")
 clientes.etl_raloy(query, "_partner", "partner", 10, 20, postgres, list_fields)
