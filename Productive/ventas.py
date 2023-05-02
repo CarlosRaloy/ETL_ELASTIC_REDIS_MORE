@@ -10,14 +10,15 @@ from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
 
-class Settings_redis:
-    def __init__(self, ip, port):
-        self.ip = ip
-        self.port = port
+class Settings_redis_elastic:
+    def __init__(self, ip_redis, port_redis, url_elasticsearch):
+        self.ip_redis = ip_redis
+        self.port_redis = port_redis
+        self.url_elasticsearch = url_elasticsearch
 
     def etl_raloy(self, query, redis_name, elasticsearch_name, time_redis, time_elastic, database, source):
         # Creamos un cliente de Redis
-        redis_client = redis.Redis(host=self.ip, port=self.port)
+        redis_client = redis.Redis(host=self.ip_redis, port=self.port_redis)
 
         # Decorador para cachear resultados de la función en Redis
         def cache_function_results(function):
@@ -102,7 +103,7 @@ class Settings_redis:
             return df
 
         def elastic_indexation():
-            client = Elasticsearch("http://localhost:9200")
+            client = Elasticsearch(self.url_elasticsearch)
 
             docs = []
             for i, row in redis_dates().iterrows():
@@ -145,5 +146,5 @@ list_fields = ['id', 'name']
 
 query = """select rp.id, rp.name from res_partner rp"""
 
-clientes = Settings_redis("localhost", "6379")
+clientes = Settings_redis_elastic("localhost", "6379", "http://localhost:9200")
 clientes.etl_raloy(query, "_partner", "partner", 10, 20, postgres, list_fields)
