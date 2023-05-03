@@ -135,11 +135,11 @@ class Settings_redis_elastic:
 
 
 postgres = {
-    "host": "10.150.4.172",
-    "port": "5433",
-    "user": "lookerstudio",
-    "password": "R3porte4d0r.",
-    "database": "raloy_productivo"
+    "host": "0.0.0.0.0",
+    "port": "5432",
+    "user": "my_user",
+    "password": "1981237",
+    "database": "my_database"
 }
 
 list_fields = ['id', 'name']
