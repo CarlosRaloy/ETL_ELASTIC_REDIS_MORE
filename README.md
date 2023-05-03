@@ -2,7 +2,7 @@
 
 ![](https://i.imgur.com/sEkqRr3.png)
 
-version 0.2 release (Estable)
+version 0.3 release (Estable)
 
 ## Summary
 
@@ -14,6 +14,15 @@ In addition, the class uses a decorator to cache the results of a Redis function
 
 Finally, the code runs an infinite loop to send the data from Redis to Elasticsearch with a certain time interval. This process is done in a separate thread, while another thread takes care of updating the cache periodically.
 
+## recommendations
+
+Use docker for testing, You can deploy the official containers
+
+[Docker Postgres | 🐘](https://hub.docker.com/_/postgres)
+
+[Docker Redis | 💾](https://hub.docker.com/_/redis)
+
+[Docker Elasticsearch | ⚡](https://hub.docker.com/_/elasticsearch)
 
 ## Example by execution
 
