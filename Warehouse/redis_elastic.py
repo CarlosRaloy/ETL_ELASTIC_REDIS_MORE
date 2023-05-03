@@ -1,11 +1,11 @@
 import ast
-import pandas as pd
 import psycopg2
 import functools
 import redis
 import threading
 import time
 import json
+import pandas as pd
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
@@ -16,7 +16,7 @@ class Settings_redis_elastic:
         self.port_redis = port_redis
         self.url_elasticsearch = url_elasticsearch
 
-    def etl_raloy(self, query, redis_name, elasticsearch_name, time_redis, time_elastic, database, source):
+    def fusion(self, query, redis_name, elasticsearch_name, time_redis, time_elastic, database, source):
         # Creamos un cliente de Redis
         redis_client = redis.Redis(host=self.ip_redis, port=self.port_redis)
 
@@ -132,19 +132,3 @@ class Settings_redis_elastic:
             elastic_indexation()
             print("Agregando datos de Elastic")
             time.sleep(time_elastic)
-
-
-postgres = {
-    "host": "10.150.4.172",
-    "port": "5433",
-    "user": "lookerstudio",
-    "password": "R3porte4d0r.",
-    "database": "raloy_productivo"
-}
-
-list_fields = ['id', 'name']
-
-query = """select rp.id, rp.name from res_partner rp"""
-
-clientes = Settings_redis_elastic("localhost", "6379", "http://localhost:9200")
-clientes.etl_raloy(query, "_partner", "partner", 10, 20, postgres, list_fields)
