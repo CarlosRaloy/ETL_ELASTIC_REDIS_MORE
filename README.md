@@ -2,7 +2,7 @@
 
 ![](https://i.imgur.com/sEkqRr3.png)
 
-version 0.3.3 (Stable release)
+version 0.3.4 (Stable release)
 
 ## Summary
 
