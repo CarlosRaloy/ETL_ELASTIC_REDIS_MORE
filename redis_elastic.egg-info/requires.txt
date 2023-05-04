@@ -1,0 +1,7 @@
+ast
+psycopg2
+psycopg2-binary
+functools
+redis
+elasticsearch==7.13.4
+pandas

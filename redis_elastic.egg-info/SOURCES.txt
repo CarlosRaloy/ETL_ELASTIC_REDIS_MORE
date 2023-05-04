@@ -5,4 +5,5 @@ Warehouse/redis_elastic.py
 redis_elastic.egg-info/PKG-INFO
 redis_elastic.egg-info/SOURCES.txt
 redis_elastic.egg-info/dependency_links.txt
+redis_elastic.egg-info/requires.txt
 redis_elastic.egg-info/top_level.txt
