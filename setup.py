@@ -6,6 +6,15 @@ setup(
     name="redis_elastic",
     version="0.3",
     description="Crea una conexión de una base de datos postgres lo gurda en cache y en elasticsearch",
+    install_requires=[
+        "ast",
+        "psycopg2",
+        "psycopg2-binary",
+        "functools",
+        "redis",
+        "elasticsearch==7.13.4",
+        "pandas"
+    ],
     long_description=readme.read(),
     long_description_content_type='text/markdown',
     author="Carlos Garcia Garcia",
