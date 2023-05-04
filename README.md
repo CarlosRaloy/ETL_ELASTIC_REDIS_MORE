@@ -2,7 +2,7 @@
 
 ![](https://i.imgur.com/sEkqRr3.png)
 
-version 0.3.4 (Stable release)
+version 1.0.0 (Stable release)
 
 ## Summary
 
@@ -42,7 +42,7 @@ list_fields = ['id', 'name', 'code']
 query = """Select rp.id,rp.name,rp.code from res_partner rp"""
 
 my_object = Settings_redis_elastic("localhost", "6379", "http://localhost:9200")
-my_object.fusion(query, "_test", "test", 10, 20, postgres, list_fields)
+my_object.fusion(query, "_test", "test", 10, 20, postgres)
 ``` 
 
 ## Documentation
@@ -68,14 +68,12 @@ my_object = Settings_redis_elastic("redis_ip", "port_redis", "http://ip_elastics
  **Recommendation:** It should be bigger than <<time_redis>>
  
  - database : It is the connection to the database, it must be a dictionary
- 
- - fields : **Important**, Field names must be the same as the SQL query headers
 
 
 Position in the method **fusion**
 
 ```python
-my_object.fusion(query, redis_name , elasticsearch_name, time_redis, time_elastic, database, fields)
+my_object.fusion(query, redis_name , elasticsearch_name, time_redis, time_elastic, database)
 ```
 
 

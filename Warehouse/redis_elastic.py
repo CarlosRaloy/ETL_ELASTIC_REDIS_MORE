@@ -16,7 +16,7 @@ class Settings_redis_elastic:
         self.port_redis = port_redis
         self.url_elasticsearch = url_elasticsearch
 
-    def fusion(self, query, redis_name, elasticsearch_name, time_redis, time_elastic, database, source):
+    def fusion(self, query, redis_name, elasticsearch_name, time_redis, time_elastic, database):
         # Creamos un cliente de Redis
         redis_client = redis.Redis(host=self.ip_redis, port=self.port_redis)
 
@@ -26,7 +26,7 @@ class Settings_redis_elastic:
             def wrapper(*args, **kwargs):
                 # Generamos la clave del caché
                 cache_key = f"{function.__name__}{redis_name}:{args}:{kwargs.items()}"
-                print(cache_key)
+                print("Key in Redis {}".format(cache_key))
                 # Intentamos obtener el resultado del caché
                 cached_result = redis_client.get(cache_key)
 
@@ -69,7 +69,7 @@ class Settings_redis_elastic:
         def update_cache():
             while True:
                 # Obtener la versión actual del caché
-                cached_version = redis_client.get(f"query_version{redis_name}")
+                cached_version = redis_client.get(f"query_version{redis_name}").decode("utf8")
 
                 # Obtener la versión actual de la consulta en la base de datos
                 db_version = str(query_dates().values)
@@ -105,12 +105,15 @@ class Settings_redis_elastic:
         def elastic_indexation():
             client = Elasticsearch(self.url_elasticsearch)
 
+            # Obtiene la variable de columnas de la función query dates
+            get_list_columns = query_dates().columns.tolist()
+            print(get_list_columns)
             docs = []
             for i, row in redis_dates().iterrows():
                 doc = {
                     '_index': elasticsearch_name,
                     '_id': i,
-                    '_source': {field: row[field] for field in source}
+                    '_source': {field: row[field] for field in get_list_columns}
                 }
                 docs.append(doc)
 

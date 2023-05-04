@@ -13,5 +13,5 @@ list_fields = ['id', 'name', 'code']
 query = """Select rp.id,rp.name,rp.code from res_partner rp"""
 
 my_object = Settings_redis_elastic("localhost", "6379", "http://localhost:9200")
-my_object.fusion(query, "_test", "test", 10, 20, postgres, list_fields)
+my_object.fusion(query, "_test", "test", 10, 20, postgres)
 
