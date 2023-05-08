@@ -2,7 +2,7 @@
 
 ![](https://i.imgur.com/sEkqRr3.png)
 
-version 1.0.0 (Stable release)
+version 1.0.1 (Stable release)
 
 ## Summary
 
@@ -36,8 +36,6 @@ postgres = {
     "password": "123",
     "database": "customer"
 }
-
-list_fields = ['id', 'name', 'code']
 
 query = """Select rp.id,rp.name,rp.code from res_partner rp"""
 

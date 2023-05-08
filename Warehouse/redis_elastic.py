@@ -69,7 +69,7 @@ class Settings_redis_elastic:
         def update_cache():
             while True:
                 # Obtener la versión actual del caché
-                cached_version = redis_client.get(f"query_version{redis_name}").decode("utf8")
+                cached_version = redis_client.get(f"query_version{redis_name}")
 
                 # Obtener la versión actual de la consulta en la base de datos
                 db_version = str(query_dates().values)
@@ -97,9 +97,11 @@ class Settings_redis_elastic:
                 df = pd.DataFrame(cached_query_odoo)
 
             except Exception:
-                data = json.loads(cached_query_redis)
-                df = pd.DataFrame.from_dict(data)
-
+                if cached_query_redis is None:
+                    df = pd.DataFrame()
+                else:
+                    data = json.loads(cached_query_redis)
+                    df = pd.DataFrame.from_dict(data)
             return df
 
         def elastic_indexation():
