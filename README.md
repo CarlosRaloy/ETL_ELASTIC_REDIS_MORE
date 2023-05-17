@@ -2,7 +2,7 @@
 
 ![](https://i.imgur.com/sEkqRr3.png)
 
-version 1.0.1 (Stable release)
+version 1.0.2 (Stable release)
 
 ## Summary
 
@@ -24,7 +24,7 @@ Use docker for testing, You can deploy the official containers
 
 [Docker Elasticsearch | ⚡](https://hub.docker.com/_/elasticsearch)
 
-## Example by execution
+### Example by execution
 
 ```python
 from Warehouse.redis_elastic import Settings_redis_elastic
@@ -74,6 +74,42 @@ Position in the method **fusion**
 my_object.fusion(query, redis_name , elasticsearch_name, time_redis, time_elastic, database)
 ```
 
+## Mode debug
 
+### Example of the tools
 
+```python
+from Develop.tools import action
+
+postgres = {
+    "host": "127.0.0.1",
+    "port": "5432",
+    "user": "etl",
+    "password": "123",
+    "database": "customer"
+}
+
+query = """Select rp.id,rp.name,rp.code from res_partner rp"""
+
+action.get_query_dates(postgres, query)
+action.get_redis_dates("localhost", 6379, "cached_query_dates_test:():dict_items([])")
+``` 
+
+### Actions
+
+**get_query_dates**
+
+With this function you get the results of your query in a Dataframe and print the columns
+
+```python
+action.get_query_dates(my_database, my_query)
+```
+
+**get_redis_dates**
+
+Get the data from the Redis collection in a Dataframe
+
+```python
+action.get_redis_dates(my_ip, port, name_of_colection_redis)
+```
 

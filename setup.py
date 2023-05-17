@@ -4,15 +4,16 @@ readme = open("./README.md", "r")
 
 setup(
     name="redis_elastic",
-    version="1.0.1",
+    version="1.0.2",
     description="Crea una conexión de una base de datos postgres lo gurda en cache y en elasticsearch",
     install_requires=[
         "setuptools",
-        "psycopg2",
+        "wheel",
         "psycopg2-binary",
         "redis",
         "elasticsearch==7.13.4",
-        "pandas"
+        "pandas",
+        "psycopg2",
     ],
     long_description=readme.read(),
     long_description_content_type='text/markdown',

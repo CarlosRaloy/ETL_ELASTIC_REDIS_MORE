@@ -9,7 +9,7 @@ class Qa:
     def __init__(self):
         pass
 
-    def query_dates(self, the_database, query):
+    def get_query_dates(self, the_database, query):
         parameters = the_database
         conn = psycopg2.connect(**parameters)
         cur = conn.cursor()
@@ -28,7 +28,7 @@ class Qa:
         print(column_names)
         return dates
 
-    def redis_dates(self, ip, port, collection):
+    def get_redis_dates(self, ip, port, collection):
         # conexión a la base de datos de Redis
         r = redis.Redis(host=ip, port=port, db=0)
 
@@ -46,4 +46,8 @@ class Qa:
         print(df)
         return df
 
+    def send_dates_to_redis(self, database, query, name_collection_redis):
+        pass
 
+
+action = Qa()

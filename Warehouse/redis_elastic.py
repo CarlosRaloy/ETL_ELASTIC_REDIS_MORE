@@ -26,7 +26,7 @@ class Settings_redis_elastic:
             def wrapper(*args, **kwargs):
                 # Generamos la clave del caché
                 cache_key = f"{function.__name__}{redis_name}:{args}:{kwargs.items()}"
-                print("Key in Redis {}".format(cache_key))
+                print("[Key in Redis 🔑]: {}".format(cache_key))
                 # Intentamos obtener el resultado del caché
                 cached_result = redis_client.get(cache_key)
 
@@ -97,11 +97,8 @@ class Settings_redis_elastic:
                 df = pd.DataFrame(cached_query_odoo)
 
             except Exception:
-                if cached_query_redis is None:
-                    df = pd.DataFrame()
-                else:
-                    data = json.loads(cached_query_redis)
-                    df = pd.DataFrame.from_dict(data)
+                data = json.loads(cached_query_redis)
+                df = pd.DataFrame.from_dict(data)
             return df
 
         def elastic_indexation():
@@ -109,7 +106,7 @@ class Settings_redis_elastic:
 
             # Obtiene la variable de columnas de la función query dates
             get_list_columns = query_dates().columns.tolist()
-            print(get_list_columns)
+            # print(get_list_columns)
             docs = []
             for i, row in redis_dates().iterrows():
                 doc = {
